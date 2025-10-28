@@ -4,9 +4,9 @@ services:
   slack-bot:
     build: .
     container_name: kl-slack
+    env_file:
+      - .env
     environment:
-      - SLACK_BOT_TOKEN
-      - SLACK_APP_TOKEN
       - SLACK_SERVICE_TOKEN
     volumes:
       - ./uploads:/app/uploads

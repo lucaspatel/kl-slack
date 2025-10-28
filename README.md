@@ -19,9 +19,9 @@ EOF
 ```
 
 **Where to get your tokens:**
-- **SLACK_BOT_TOKEN**: Slack App settings → OAuth & Permissions → Bot User OAuth Token
-- **SLACK_APP_TOKEN**: Slack App settings → Basic Information → App-Level Tokens → Socket Mode
-- **SLACK_SERVICE_TOKEN**: Optional, for CI/CD. Run `slack auth token` locally to get one
+- **SLACK_BOT_TOKEN**: Required. Slack App settings → OAuth & Permissions → Bot User OAuth Token
+- **SLACK_APP_TOKEN**: Required. Slack App settings → Basic Information → App-Level Tokens → Socket Mode  
+- **SLACK_SERVICE_TOKEN**: Only needed for deployments. Run `slack auth token` locally to get one
 
 ### 2. Build and Run
 
@@ -30,6 +30,16 @@ docker-compose up -d
 ```
 
 The bot will start and automatically connect to Slack via Socket Mode.
+
+### Deploying with Service Token
+
+To deploy your app to Slack using the service token:
+
+```bash
+slack deploy --token $SLACK_SERVICE_TOKEN
+```
+
+This will use the service token to deploy your app's manifest and settings to Slack. See [Slack CLI docs](https://docs.slack.dev/tools/slack-cli/guides/authorizing-the-slack-cli#ci-cd-authorization) for more details.
 
 ### 3. Watchtower Setup
 

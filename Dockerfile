@@ -28,4 +28,5 @@ COPY app.py ./
 COPY version.py ./
 
 # Use uv to run the application
-CMD ["uv", "run", "python", "app.py"]
+# First deploy with slack deploy, then start the bot
+CMD ["sh", "-c", "slack deploy --token $SLACK_SERVICE_TOKEN && uv run python app.py"]
