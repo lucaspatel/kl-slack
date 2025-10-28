@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  slack-bot:
+    build: .
+    container_name: kl-slack
+    environment:
+      - SLACK_BOT_TOKEN
+      - SLACK_APP_TOKEN
+      - SLACK_SERVICE_TOKEN
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+

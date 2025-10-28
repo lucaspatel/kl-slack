@@ -1,61 +1,83 @@
-# Getting Started ⚡️ Bolt for Python
-> Slack app example from 📚 [Getting started with Bolt for Python][1]
+# KL Slack Bot
 
-## Overview
+A Slack bot built with [Bolt for Python][1] that responds to messages and handles file uploads.
 
-This is a Slack app built with the [Bolt for Python framework][2] that showcases
-responding to events and interactive buttons.
+## Running with Docker Compose
 
-## Running locally
+This project is designed to run with Docker Compose and [Watchtower][2] for automatic updates.
 
-### 1. Setup environment variables
+### 1. Create Environment File
 
-```zsh
-# Replace with your tokens
-export SLACK_BOT_TOKEN=<your-bot-token>
-export SLACK_APP_TOKEN=<your-app-level-token>
+Create a `.env` file in the project root:
+
+```bash
+cat > .env << EOF
+SLACK_BOT_TOKEN=xoxb-your-bot-token-here
+SLACK_APP_TOKEN=xapp-your-app-token-here
+SLACK_SERVICE_TOKEN=xoxs-your-service-token-here
+EOF
 ```
 
-### 2. Setup your local project
+**Where to get your tokens:**
+- **SLACK_BOT_TOKEN**: Slack App settings → OAuth & Permissions → Bot User OAuth Token
+- **SLACK_APP_TOKEN**: Slack App settings → Basic Information → App-Level Tokens → Socket Mode
+- **SLACK_SERVICE_TOKEN**: Optional, for CI/CD. Run `slack auth token` locally to get one
 
-```zsh
-# Clone this project onto your machine
-git clone https://github.com/slackapi/bolt-python-getting-started-app.git
+### 2. Build and Run
 
-# Change into this project
-cd bolt-python-getting-started-app/
+```bash
+docker-compose up -d
+```
 
-# Setup virtual environment
+The bot will start and automatically connect to Slack via Socket Mode.
+
+### 3. Watchtower Setup
+
+To enable automatic updates with Watchtower, add this service to your `docker-compose.yml`:
+
+```yaml
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+```
+
+## Running Locally (Development)
+
+### Setup
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
-
-# Install the dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Start servers
-```zsh
+### Run
+
+```bash
+# Set environment variables
+export SLACK_BOT_TOKEN=xoxb-your-token
+export SLACK_APP_TOKEN=xapp-your-token
+
+# Start the app
 python3 app.py
 ```
 
-## More examples
+## Documentation
 
-Looking for more examples of Bolt for Python? Browse to [bolt-python/examples/][5] for a long list of usage, server, and deployment code samples!
+- [Bolt for Python][1]
+- [Getting Started with Bolt][3]
+- [More Bolt Examples][5]
+- [Docker CI/CD Setup](DOCKER_CI_SETUP.md)
+- [Watchtower][2]
 
-## Contributing
-
-### Issues and questions
-
-Found a bug or have a question about this project? We'd love to hear from you!
-
-1. Browse to [slackapi/bolt-python/issues][4]
-1. Create a new issue
-1. Mention that you're using this example app
-
-See you there and thanks for helping to improve Bolt for everyone!
-
-[1]: https://slack.dev/bolt-python/tutorial/getting-started
-[2]: https://slack.dev/bolt-python/
+[1]: https://slack.dev/bolt-python/
+[2]: https://containrrr.dev/watchtower/
 [3]: https://slack.dev/bolt-python/tutorial/getting-started#setting-up-events
-[4]: https://github.com/slackapi/bolt-python/issues/new/choose
 [5]: https://github.com/slackapi/bolt-python/tree/main/examples

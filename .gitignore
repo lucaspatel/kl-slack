@@ -7,3 +7,7 @@ env*/
 
 # Editors
 .vscode/
+
+# Secrets and uploads
+.env
+uploads/
